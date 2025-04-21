@@ -1,0 +1,27 @@
+{
+    "name": "numerology-cycle-7",
+    "version": "0.1.0",
+    "description": "A symbolic runtime framework for tracking, evolving, and visualizing human state cycles using numerology principles.",
+    "main": "index.js",
+    "scripts": {
+        "dev": "node index.js",
+        "start": "node index.js",
+        "test": "jest"
+    },
+    "keywords": [
+        "numerology",
+        "runtime",
+        "state-cycle",
+        "symbolic-computing",
+        "mindstate-tracking"
+    ],
+    "author": "brforeal.dev",
+    "license": "MIT",
+    "dependencies": {
+        "chalk": "^5.4.1"
+    },
+    "devDependencies": {
+        "jest": "^29.7.0"
+    }
+    
+}
