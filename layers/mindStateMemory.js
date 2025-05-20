@@ -1,5 +1,4 @@
 // layers/mindStateMemory.js
-
 // 🧠 MindState Memory Layer — Stores symbolic interactions across runtime phases
 
 class MindStateMemory {
@@ -23,6 +22,10 @@ class MindStateMemory {
 
   findByPhase(phase) {
     return this.entries.filter(e => e.phase === phase);
+  }
+
+  findByDateRange({ yesterday, today, tomorrow }) {
+    return this.entries.filter(e => [yesterday, today, tomorrow].includes(e.date));
   }
 
   exportLog() {
