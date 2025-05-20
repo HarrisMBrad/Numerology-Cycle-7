@@ -2,31 +2,41 @@
 
 const phaseKernel = require('../core/phaseKernel');
 const phase1 = require('../core/phases/phase1');
+const phase2 = require('../core/phases/phase2');
 
-// Mocking the phase1 module to focus on testing phaseKernel independently
 jest.mock('../core/phases/phase1', () => ({
-  run: jest.fn(() => {
-    return { status: 'active', phase: 1, log: 'Presence phase executed. Identity anchored in present moment.' };
-  })
+  run: jest.fn(() => ({
+    status: 'active',
+    phase: 1,
+    log: 'Presence phase executed. Identity anchored in present moment.'
+  }))
+}));
+
+jest.mock('../core/phases/phase2', () => ({
+  run: jest.fn(() => ({
+    status: 'active',
+    phase: 2,
+    log: 'Planning phase executed. Strategic intent calibrated.'
+  }))
 }));
 
 describe('Phase Kernel', () => {
   beforeEach(() => {
-    // Reset the mock before each test
     phase1.run.mockClear();
+    phase2.run.mockClear();
+    console.log = jest.fn();
   });
 
   test('should initialize the phase kernel correctly', () => {
-    console.log = jest.fn(); // Mock console.log
     phaseKernel.init();
 
     expect(console.log).toHaveBeenCalledWith("🔄 Phase Kernel loaded. Runtime ready.");
     expect(console.log).toHaveBeenCalledWith("🌀 Running Phase 1");
   });
 
-  test('should run Phase 1 and log the correct information', () => {
+  test('should run Phase 1 and return expected log', () => {
     const result = phaseKernel.runPhase(1);
-    
+
     expect(phase1.run).toHaveBeenCalledTimes(1);
     expect(result).toEqual({
       status: 'active',
@@ -35,11 +45,22 @@ describe('Phase Kernel', () => {
     });
   });
 
-  test('should handle unknown phases gracefully', () => {
-    const unknownPhaseResult = phaseKernel.runPhase(99);
-    
-    expect(console.log).toHaveBeenCalledWith("⚠️ Unknown phase number.");
-    expect(unknownPhaseResult).toBeUndefined();
+  test('should run Phase 2 and return expected log', () => {
+    const result = phaseKernel.runPhase(2);
+
+    expect(phase2.run).toHaveBeenCalledTimes(1);
+    expect(result).toEqual({
+      status: 'active',
+      phase: 2,
+      log: 'Planning phase executed. Strategic intent calibrated.'
+    });
+  });
+
+  test('should handle unknown phase numbers gracefully', () => {
+    const result = phaseKernel.runPhase(99);
+
+    expect(console.log).toHaveBeenCalledWith("⚠️ Unknown or unconfigured phase number.");
+    expect(result).toBeUndefined();
   });
 });
 
