@@ -1,0 +1,32 @@
+/* styles/chat.css */
+
+/* Smooth scroll behavior for chat windows */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar (for Chrome/WebKit) */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #d1d5db; /* Tailwind gray-300 */
+  border-radius: 4px;
+}
+
+/* Subtle fade-in for chat bubbles */
+.chat-bubble {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
