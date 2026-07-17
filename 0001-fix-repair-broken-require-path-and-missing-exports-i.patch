@@ -1,0 +1,84 @@
+From 271f7eda1df9fdc59d2b0ede4cc96431bf7d26fd Mon Sep 17 00:00:00 2001
+From: HarrisMBrad <brforeal.dev@gmail.com>
+Date: Fri, 17 Jul 2026 15:41:18 +0000
+Subject: [PATCH] fix: repair broken require path and missing exports in
+ phase2.js
+
+- phase2.js was requiring './layers/integrationLayer' (wrong relative
+  path from core/phases/) and had no module.exports, so calling
+  phaseKernel.runPhase(2) or running index.js threw MODULE_NOT_FOUND
+  and crashed the runtime.
+- Wrapped phase2 logic in the same { run: () => {...} } shape as
+  phase1.js/phase3.js and fixed the require path to
+  '../../layers/integrationLayer'.
+- Removed tests/integrationLayer.js: a stray debug script (not a real
+  jest test, doesn't match *.test.js) with the same broken require
+  path. It wasn't being run by the test suite, just dead/broken code
+  sitting in the tests folder.
+- Verified: node index.js runs clean, phaseKernel.runPhase(2) works,
+  and npm test still passes 4/4.
+---
+ core/phases/phase2.js     | 28 +++++++++++++++++-----------
+ tests/integrationLayer.js |  9 ---------
+ 2 files changed, 17 insertions(+), 20 deletions(-)
+ delete mode 100644 tests/integrationLayer.js
+
+diff --git a/core/phases/phase2.js b/core/phases/phase2.js
+index 5c34c45..e468205 100644
+--- a/core/phases/phase2.js
++++ b/core/phases/phase2.js
+@@ -1,18 +1,24 @@
+-  // /phases/phase2.js 
++// /phases/phase2.js
++const IntegrationLayer = require('../../layers/integrationLayer');
++
++module.exports = {
++  run: () => {
+     console.log("🟢 Phase 2: Planning initiated.");
+     // Symbolic actions for Planning phase
+-const IntegrationLayer = require('./layers/integrationLayer');
+-const layer = new IntegrationLayer();
+-
+-const result = layer.mergeResponses({
+-  ego: "I believe this is correct.",
+-  shadow: "But what if we’re wrong?",
+-  context: "Testing phase logic"
+-});
+-console.log(result);
++    const layer = new IntegrationLayer();
++    const integration = layer.mergeResponses({
++      ego: "I believe this is correct.",
++      shadow: "But what if we're wrong?",
++      context: "Testing phase logic"
++    });
++    console.log(integration);
+ 
+     const phase2Log = {
+       status: "active",
+       phase: 2,
+       log: "Planning phase executed. Strategic intent calibrated."
+-    };
+\ No newline at end of file
++    };
++
++    return phase2Log;
++  }
++};
+diff --git a/tests/integrationLayer.js b/tests/integrationLayer.js
+deleted file mode 100644
+index 8953dbf..0000000
+--- a/tests/integrationLayer.js
++++ /dev/null
+@@ -1,9 +0,0 @@
+-const IntegrationLayer = require('./layers/integrationLayer');
+-const layer = new IntegrationLayer();
+-
+-const result = layer.mergeResponses({
+-  ego: "I believe this is correct.",
+-  shadow: "But what if we’re wrong?",
+-  context: "Testing phase logic"
+-});
+-console.log(result);
+-- 
+2.43.0
+
