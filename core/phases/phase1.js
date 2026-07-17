@@ -1,3 +1,6 @@
+const phase2 = require('./phase2');
+const phase3 = require('./phase3');
+
 module.exports = {
   run: () => {
     console.log("🟢 Phase 1: Presence initiated.");
@@ -8,26 +11,11 @@ module.exports = {
       log: "Presence phase executed. Identity anchored in present moment."
     };
 
-    // Move to Phase 2
-    console.log("🟢 Phase 2: Planning initiated.");
-    // Symbolic actions for Planning phase
-    const phase2Log = {
-      status: "active",
-      phase: 2,
-      log: "Planning phase executed. Strategic intent calibrated."
-    };
-
-    // Move to Phase 3
-    console.log("🟢 Phase 3: Action initiated.");
-    // Symbolic actions for Action phase
-    const phase3Log = {
-      status: "active",
-      phase: 3,
-      log: "Action phase executed. Kinetic energy activated."
-    };
+    // Delegate to Phase 2 and Phase 3 instead of duplicating their logic inline
+    const phase2Log = phase2.run();
+    const phase3Log = phase3.run();
 
     return [phase1Log, phase2Log, phase3Log];
   }
 };
-
   
