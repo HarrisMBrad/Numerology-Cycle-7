@@ -56,4 +56,3 @@ npm test    # runs the Jest suite
 ```
 
 ---
-
