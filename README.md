@@ -52,7 +52,3 @@ npm test    # runs the Jest suite
     "today": "active",
     "tomorrow": "pending"
   }
-}
-```
-
----
